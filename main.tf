@@ -23,8 +23,8 @@ provider "aws" {
 # Variables
 #---------------------------------
 variable "project" {
-  type    = string
+  type = string
 }
 variable "enviroment" {
-  type    = string
+  type = string
 }
