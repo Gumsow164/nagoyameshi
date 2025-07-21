@@ -18,7 +18,7 @@ resource "aws_vpc" "dev_vpc" {
 }
 
 #---------------------------------
-# Public Subnets
+# Subnets
 #---------------------------------
 resource "aws_subnet" "public_subnet_1a" {
   vpc_id                  = aws_vpc.dev_vpc.id
@@ -72,3 +72,47 @@ resource "aws_subnet" "private_subnet_1c" {
   }
 }
 
+#---------------------------------
+# Route table
+#---------------------------------
+resource "aws_route_table" "public_rt" {
+  vpc_id = aws_vpc.dev_vpc.id
+
+  tags = {
+    Name    = "${var.project}-${var.enviroment}-public_rt"
+    Project = var.project
+    Env     = var.enviroment
+    Type    = "public"
+  }
+}
+
+resource "aws_route_table" "private_rt" {
+  vpc_id = aws_vpc.dev_vpc.id
+
+  tags = {
+    Name    = "${var.project}-${var.enviroment}-private_rt"
+    Project = var.project
+    Env     = var.enviroment
+    Type    = "private"
+  }
+}
+
+resource "aws_route_table_association" "public_rt_1a" {
+  route_table_id = aws_route_table.public_rt.id
+  subnet_id      = aws_subnet.public_subnet_1a.id
+}
+
+resource "aws_route_table_association" "public_rt_1c" {
+  route_table_id = aws_route_table.public_rt.id
+  subnet_id      = aws_subnet.public_subnet_1c.id
+}
+
+resource "aws_route_table_association" "private_rt_1a" {
+  route_table_id = aws_route_table.private_rt.id
+  subnet_id      = aws_subnet.private_subnet_1a.id
+}
+
+resource "aws_route_table_association" "private_rt_1c" {
+  route_table_id = aws_route_table.private_rt.id
+  subnet_id      = aws_subnet.private_subnet_1c.id
+}
