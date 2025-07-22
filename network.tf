@@ -13,7 +13,6 @@ resource "aws_vpc" "dev_vpc" {
     Name    = "${var.project}-${var.enviroment}-vpc"
     Project = var.project
     Env     = var.enviroment
-
   }
 }
 
