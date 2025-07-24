@@ -55,18 +55,3 @@ resource "aws_ecs_service" "mysql_client_service" {
 
   depends_on = [aws_iam_role_policy_attachment.ecs_execution_policy]
 }
-
-resource "aws_ecr_repository" "app" {
-  name                 = "dev-app-repo"
-  image_tag_mutability = "MUTABLE"
-
-  image_scanning_configuration {
-    scan_on_push = true
-  }
-
-  tags = {
-    Name    = "${var.project}-${var.enviroment}-mysql"
-    Project = var.project
-    Env     = var.enviroment
-  }
-}
