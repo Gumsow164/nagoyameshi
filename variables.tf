@@ -21,3 +21,13 @@ variable "private_subnet_cidrs" {
   type        = list(string)
   default     = ["10.0.101.0/24", "10.0.102.0/24"]
 }
+
+variable "db_username" {
+  description = "The username for the database."
+  type        = string
+}
+
+variable "db_password" {
+  description = "The password for the database."
+  type        = string
+}
