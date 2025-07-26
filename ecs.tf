@@ -50,6 +50,13 @@ resource "aws_ecs_task_definition" "laravel_app_task" {
         }
       ]
       essential = true
+      healthCheck = {
+        command     = ["CMD-SHELL", "curl -f http://localhost/ || exit 1"]
+        interval    = 30
+        timeout     = 5
+        retries     = 3
+        startPeriod = 60
+      }
       logConfiguration = {
         logDriver = "awslogs"
         options = {
@@ -103,11 +110,11 @@ resource "aws_ecs_service" "laravel_app_service" {
 # CloudWatch Log Group for Laravel App
 #---------------------------------
 resource "aws_cloudwatch_log_group" "laravel_app_logs" {
-  name              = "/ecs/laravel-app"
+  name              = "/ecs/laravel-app-new"
   retention_in_days = 7
 
   tags = {
-    Name        = "${var.project}-${var.enviroment}-laravel-app-logs"
+    Name        = "${var.project}-${var.enviroment}-laravel-app-logs-new"
     Project     = var.project
     Environment = var.enviroment
   }
