@@ -63,6 +63,7 @@ resource "aws_security_group" "app_sg" {
   }
 }
 
+# ALBからECSへの通信を許可
 resource "aws_security_group_rule" "app_in_tcp80" {
   type                     = "ingress"
   from_port                = 80
@@ -81,31 +82,14 @@ resource "aws_security_group_rule" "app_in_tcp3000" {
   source_security_group_id = aws_security_group.web_sg.id
 }
 
-resource "aws_security_group_rule" "app_out_http" {
+# ECSからインターネットへの通信を許可
+resource "aws_security_group_rule" "app_out_all" {
   type              = "egress"
-  from_port         = 80
-  to_port           = 80
-  protocol          = "tcp"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.app_sg.id
-  prefix_list_ids   = [data.aws_prefix_list.s3_pl.id]
-}
-
-resource "aws_security_group_rule" "app_out_https" {
-  type              = "egress"
-  from_port         = 443
-  to_port           = 443
-  protocol          = "tcp"
-  security_group_id = aws_security_group.app_sg.id
-  prefix_list_ids   = [data.aws_prefix_list.s3_pl.id]
-}
-
-resource "aws_security_group_rule" "app_out_tcp3306" {
-  type                     = "egress"
-  from_port                = 3306
-  to_port                  = 3306
-  protocol                 = "tcp"
-  security_group_id        = aws_security_group.app_sg.id
-  source_security_group_id = aws_security_group.db_sg.id
 }
 
 # opmng sg

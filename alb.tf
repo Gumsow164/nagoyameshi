@@ -2,7 +2,7 @@
 # Application Load Balancer
 #---------------------------------
 resource "aws_lb" "laravel_alb" {
-  name               = "${var.project}-${var.enviroment}-laravel-alb-new"
+  name               = "${var.project}-${var.enviroment}-laravel-alb"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.web_sg.id]
@@ -11,7 +11,7 @@ resource "aws_lb" "laravel_alb" {
   enable_deletion_protection = false
 
   tags = {
-    Name        = "${var.project}-${var.enviroment}-laravel-alb-new"
+    Name        = "${var.project}-${var.enviroment}-laravel-alb"
     Project     = var.project
     Environment = var.enviroment
   }
@@ -21,7 +21,7 @@ resource "aws_lb" "laravel_alb" {
 # Target Group
 #---------------------------------
 resource "aws_lb_target_group" "laravel_tg" {
-  name        = "${var.project}-${var.enviroment}-laravel-tg-new"
+  name        = "${var.project}-${var.enviroment}-laravel-tg"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = aws_vpc.dev_vpc.id
@@ -40,7 +40,7 @@ resource "aws_lb_target_group" "laravel_tg" {
   }
 
   tags = {
-    Name        = "${var.project}-${var.enviroment}-laravel-tg-new"
+    Name        = "${var.project}-${var.enviroment}-laravel-tg"
     Project     = var.project
     Environment = var.enviroment
   }

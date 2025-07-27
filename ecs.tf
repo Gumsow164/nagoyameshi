@@ -25,8 +25,36 @@ resource "aws_ecs_task_definition" "laravel_app_task" {
       ]
       environment = [
         {
+          name  = "APP_ENV"
+          value = "production"
+        },
+        {
+          name  = "APP_DEBUG"
+          value = "false"
+        },
+        {
+          name  = "APP_URL"
+          value = "http://${aws_lb.laravel_alb.dns_name}"
+        },
+        {
+          name  = "APP_KEY"
+          value = "base64:${random_string.app_key.result}"
+        },
+        {
+          name  = "DB_CONNECTION"
+          value = "mysql"
+        },
+        {
           name  = "DB_HOST"
           value = aws_db_instance.mysql.address
+        },
+        {
+          name  = "DB_PORT"
+          value = "3306"
+        },
+        {
+          name  = "DB_DATABASE"
+          value = aws_db_instance.mysql.db_name
         },
         {
           name  = "DB_USERNAME"
@@ -37,16 +65,16 @@ resource "aws_ecs_task_definition" "laravel_app_task" {
           value = var.db_password
         },
         {
-          name = "DB_DATABASE"
-          value = aws_db_instance.mysql.db_name
+          name  = "CACHE_DRIVER"
+          value = "file"
         },
         {
-          name  = "APP_ENV"
-          value = "production"
+          name  = "SESSION_DRIVER"
+          value = "file"
         },
         {
-          name  = "APP_DEBUG"
-          value = "false"
+          name  = "QUEUE_DRIVER"
+          value = "sync"
         }
       ]
       essential = true
@@ -55,12 +83,12 @@ resource "aws_ecs_task_definition" "laravel_app_task" {
         interval    = 30
         timeout     = 5
         retries     = 3
-        startPeriod = 60
+        startPeriod = 120
       }
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          awslogs-group         = "/ecs/laravel-app"
+          awslogs-group         = "/ecs/laravel-app-new"
           awslogs-region        = var.aws_region
           awslogs-stream-prefix = "ecs"
         }
